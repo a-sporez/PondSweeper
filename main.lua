@@ -8,7 +8,7 @@ function love.load()
     for imageIndex, image in ipairs( {
         1, 2, 3, 4, 5, 6, 7, 8,
         'uncovered', 'covered_highlighted', 'covered',
-        'flag', 'question',
+        'labu', 'question',
     } ) do
         images[image] = love.graphics.newImage( 'images/'..image..'.png' )
     end
@@ -67,7 +67,7 @@ function love.load()
                 grid[y][x] = {
                     critter = false, -- Whether this cell contains a critter
                     critterQuad = nil, -- The specific sprite for this critter
-                    state = 'covered', -- Cell state: 'covered', 'uncovered', 'flag', 'question'
+                    state = 'covered', -- Cell state: 'covered', 'uncovered', 'labu', 'question'
                 }
             end
         end
@@ -97,7 +97,7 @@ end
 -- Handles mouse click events for gameplay
 function love.mousereleased(mouseX, mouseY, button)
     if not gameOver then
-        if button == 1 and grid[selectedY][selectedX].state ~= 'flag' then
+        if button == 1 and grid[selectedY][selectedX].state ~= 'labu' then
             if firstClick then
                 firstClick = false
 
@@ -181,11 +181,11 @@ function love.mousereleased(mouseX, mouseY, button)
             end
 
         elseif button == 2 then
-            -- Toggle cell state between 'flag', 'question', and 'covered'
+            -- Toggle cell state between 'labu', 'question', and 'covered'
             if grid[selectedY][selectedX].state == 'covered' then
-                grid[selectedY][selectedX].state = 'flag'
+                grid[selectedY][selectedX].state = 'labu'
 
-            elseif grid[selectedY][selectedX].state == 'flag' then
+            elseif grid[selectedY][selectedX].state == 'labu' then
                 grid[selectedY][selectedX].state = 'question'
 
             elseif grid[selectedY][selectedX].state == 'question' then
@@ -214,7 +214,7 @@ function love.draw()
                 -- Highlight the selected cell
                 if x == selectedX and y == selectedY and not gameOver then
                     if love.mouse.isDown(1) then
-                        if grid[y][x].state == 'flag' then
+                        if grid[y][x].state == 'labu' then
                             drawCell(images.covered, x, y)
                         else
                             drawCell(images.uncovered, x, y)
@@ -238,9 +238,9 @@ function love.draw()
                 drawCell(images[getSurroundingCritterCount(x, y)], x, y)
             end
 
-            -- Draw flags and question marks
-            if grid[y][x].state == 'flag' then
-                drawCell(images.flag, x, y)
+            -- Draw labus and question marks
+            if grid[y][x].state == 'labu' then
+                drawCell(images.labu, x, y)
             elseif grid[y][x].state == 'question' then
                 drawCell(images.question, x, y)
             end
