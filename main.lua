@@ -199,6 +199,8 @@ end
 
 -- Draw the game grid and other visual elements
 function love.draw()
+--    local scaleFactor = 2 -- Match the scale factor in love.conf
+--    love.graphics.scale(scaleFactor, scaleFactor) -- Scale all drawing operations
     for y = 1, gridYCount do
         for x = 1, gridXCount do
             local function drawCell(image, x, y)
