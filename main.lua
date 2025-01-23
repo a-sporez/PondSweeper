@@ -2,7 +2,7 @@ local love = require 'love'
 
 -- Load necessary images and initialize critter quads
 function love.load()
-    images = {}
+    _G.images = {}
 
     -- Load numeric and state images
     for imageIndex, image in ipairs( {
@@ -17,7 +17,7 @@ function love.load()
     images.critter = love.graphics.newImage('images/critter-Sheet.png')
 
     -- Sprite sheet setup: Define quads for each critter
-    critterQuads = {}
+    _G.critterQuads = {}
     local critterWidth = 18 -- Width of a single critter sprite
     local critterHeight = 18 -- Height of a single critter sprite
     local critterSheetWidth = images.critter:getWidth()
@@ -33,13 +33,13 @@ function love.load()
         end
     end
 
-    cellSize = 18 -- Size of each grid cell in pixels
+    _G.cellSize = 18 -- Size of each grid cell in pixels
 
-    gridXCount = 19 -- Number of cells horizontally
-    gridYCount = 14 -- Number of cells vertically
+    _G.gridXCount = 19 -- Number of cells horizontally
+    _G.gridYCount = 14 -- Number of cells vertically
 
     -- Function to calculate the number of surrounding critters for a cell
-    function getSurroundingCritterCount(x, y)
+    function _G.getSurroundingCritterCount(x, y)
         local surroundingCritterCount = 0
 
         for dy = -1, 1 do
@@ -58,8 +58,8 @@ function love.load()
     end
 
     -- Resets the game state and initializes the grid
-    function reset()
-        grid = {}
+    function _G.reset()
+        _G.grid = {}
 
         for y = 1, gridYCount do
             grid[y] = {}
@@ -72,8 +72,8 @@ function love.load()
             end
         end
 
-        gameOver = false
-        firstClick = true
+        _G.gameOver = false
+        _G.firstClick = true
     end
 
     reset() -- Initialize the game
@@ -81,16 +81,16 @@ end
 
 -- Updates the selected cell based on mouse position
 function love.update()
-    selectedX = math.floor(love.mouse.getX() / cellSize) + 1
-    selectedY = math.floor(love.mouse.getY() / cellSize) + 1
+    _G.selectedX = math.floor(love.mouse.getX() / cellSize) + 1
+    _G.selectedY = math.floor(love.mouse.getY() / cellSize) + 1
 
     -- Clamp selection to grid boundaries
     if selectedX > gridXCount then
-        selectedX = gridXCount
+        _G.selectedX = gridXCount
     end
 
     if selectedY > gridYCount then
-        selectedY = gridYCount
+        _G.selectedY = gridYCount
     end
 end
 
@@ -99,7 +99,7 @@ function love.mousereleased(mouseX, mouseY, button)
     if not gameOver then
         if button == 1 and grid[selectedY][selectedX].state ~= 'labu' then
             if firstClick then
-                firstClick = false
+                _G.firstClick = false
 
                 -- Generate random positions for critters
                 local possibleCritterPositions = {}
@@ -126,7 +126,7 @@ function love.mousereleased(mouseX, mouseY, button)
 
             if grid[selectedY][selectedX].critter then
                 grid[selectedY][selectedX].state = 'uncovered'
-                gameOver = true -- Game ends when clicking on a critter
+                _G.gameOver = true -- Game ends when clicking on a critter
             else
                 -- Flood-fill algorithm to uncover empty cells
                 local stack = {
@@ -176,7 +176,7 @@ function love.mousereleased(mouseX, mouseY, button)
                 end
 
                 if complete then
-                    gameOver = true
+                    _G.gameOver = true
                 end
             end
 
