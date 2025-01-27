@@ -1,4 +1,4 @@
-local love = require 'love'
+-- local love = require 'love'
 
 -- Load necessary images and initialize critter quads
 function love.load()
